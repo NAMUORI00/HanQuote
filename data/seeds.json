@@ -1,0 +1,43 @@
+[
+  {
+    "text_original": "The only limit to our realization of tomorrow is our doubts of today.",
+    "author": "Franklin D. Roosevelt",
+    "source_name": "Seed",
+    "source_url": null,
+    "language": "en",
+    "tags": ["inspiration"]
+  },
+  {
+    "text_original": "Simplicity is the soul of efficiency.",
+    "author": "Austin Freeman",
+    "source_name": "Seed",
+    "source_url": null,
+    "language": "en",
+    "tags": ["simplicity"]
+  },
+  {
+    "text_original": "Stay hungry, stay foolish.",
+    "author": "Steve Jobs",
+    "source_name": "Seed",
+    "source_url": null,
+    "language": "en",
+    "tags": ["life"]
+  },
+  {
+    "text_original": "Code is like humor. When you have to explain it, it’s bad.",
+    "author": "Cory House",
+    "source_name": "Seed",
+    "source_url": null,
+    "language": "en",
+    "tags": ["software"]
+  },
+  {
+    "text_original": "Programs must be written for people to read, and only incidentally for machines to execute.",
+    "author": "Harold Abelson",
+    "source_name": "Seed",
+    "source_url": null,
+    "language": "en",
+    "tags": ["software"]
+  }
+]
+

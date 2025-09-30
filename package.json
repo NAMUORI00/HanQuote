@@ -1,0 +1,16 @@
+{
+  "name": "hanquote",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Automated quote fetcher and static site publisher for GitHub Pages.",
+  "scripts": {
+    "fetch": "node scripts/fetch_quotes.mjs",
+    "dev:offline": "OFFLINE_MODE=1 node scripts/fetch_quotes.mjs",
+    "dev:dry": "DRY_RUN=1 node scripts/fetch_quotes.mjs",
+    "preview": "npx http-server -c-1 -p 4173 -a 127.0.0.1 site"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

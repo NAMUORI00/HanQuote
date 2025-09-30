@@ -1,0 +1,54 @@
+[
+  {
+    "id": "2025-09-25_b4c539723f",
+    "text_original": "The only limit to our realization of tomorrow is our doubts of today.",
+    "author": "Franklin D. Roosevelt",
+    "source_name": "Seed",
+    "source_url": null,
+    "language": "en",
+    "tags": [
+      "inspiration"
+    ],
+    "fetched_at": "2025-09-25T08:31:07.490Z",
+    "hash": "sha256:b4c539723f937ca359a6fe5af6069af4abc7238adc043bbf912216ba320270b4"
+  },
+  {
+    "id": "2025-09-25_9986ab89c2",
+    "text_original": "Simplicity is the soul of efficiency.",
+    "author": "Austin Freeman",
+    "source_name": "Seed",
+    "source_url": null,
+    "language": "en",
+    "tags": [
+      "simplicity"
+    ],
+    "fetched_at": "2025-09-25T08:43:01.133Z",
+    "hash": "sha256:9986ab89c23f9f41f3b38e2b16595b16d9f7231e6665ca266576efa7c3ac16a2"
+  },
+  {
+    "id": "2025-09-30_b4c539723f",
+    "text_original": "The only limit to our realization of tomorrow is our doubts of today.",
+    "author": "Franklin D. Roosevelt",
+    "source_name": "Seed",
+    "source_url": null,
+    "language": "en",
+    "tags": [
+      "inspiration"
+    ],
+    "fetched_at": "2025-09-30T00:55:26.292Z",
+    "hash": "sha256:b4c539723f937ca359a6fe5af6069af4abc7238adc043bbf912216ba320270b4"
+  },
+  {
+    "id": "2025-09-30_b4c539723f",
+    "text_original": "The only limit to our realization of tomorrow is our doubts of today.",
+    "author": "Franklin D. Roosevelt",
+    "source_name": "Seed",
+    "source_url": null,
+    "language": "en",
+    "tags": [
+      "inspiration"
+    ],
+    "fetched_at": "2025-09-30T00:55:57.935Z",
+    "hash": "sha256:b4c539723f937ca359a6fe5af6069af4abc7238adc043bbf912216ba320270b4"
+  }
+]

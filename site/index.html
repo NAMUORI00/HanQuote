@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HanQuote — 오늘의 명언</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>HanQuote</h1>
+      <p>원문과 한국어 번역으로 매일 한 문장</p>
+    </header>
+
+    <main>
+      <section id="latest"></section>
+    </main>
+
+    <footer>
+      <p>
+        데이터 출처: <a href="https://api.quotable.io" target="_blank" rel="noreferrer">Quotable</a>
+        • 코드: <a href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+      </p>
+      <p id="updated"></p>
+    </footer>
+
+    <script>
+      async function load() {
+        const el = document.getElementById('latest');
+        const updated = document.getElementById('updated');
+        try {
+          const resp = await fetch('./data/quotes.json', { cache: 'no-cache' });
+          if (!resp.ok) throw new Error('HTTP ' + resp.status);
+          const arr = await resp.json();
+          arr.sort((a,b) => (a.fetched_at > b.fetched_at ? -1 : 1));
+          const N = 10;
+          const recent = arr.slice(0, N);
+          el.innerHTML = recent.map(renderCard).join('');
+          if (arr.length > 0) {
+            const d = new Date(arr[0].fetched_at);
+            updated.textContent = `마지막 갱신: ${d.toLocaleString('ko-KR')}`;
+          }
+        } catch (e) {
+          el.innerHTML = '<p>데이터를 불러올 수 없습니다.</p>';
+        }
+      }
+
+      function esc(s) {
+        return (s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]));
+      }
+
+      function renderCard(q) {
+        const src = q.source_name ? `${esc(q.source_name)}${q.source_url ? `, <a href="${esc(q.source_url)}" target="_blank" rel="noreferrer">링크</a>`: ''}` : '—';
+        return `
+          <article class="quote">
+            <blockquote>“${esc(q.text_original)}”</blockquote>
+            <p class="meta">${q.author ? esc(q.author) : 'Unknown'} · ${src}</p>
+          </article>
+        `;
+      }
+
+      load();
+    </script>
+  </body>
+  </html>
