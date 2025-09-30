@@ -90,7 +90,7 @@
 ├─ .github/
 │  └─ workflows/
 │     └─ schedule.yml          # 스케줄/수동 트리거 파이프라인
-├─ README.md
+├─ readme.md
 └─ package.json (또는 requirements.txt)
 ```
 

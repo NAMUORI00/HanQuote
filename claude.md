@@ -1,4 +1,4 @@
-# CLAUDE.md
+# claude.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -187,7 +187,7 @@ No formal test suite yet. To add tests:
 - **Docker volume issues**: Ensure `./` is mounted correctly in [compose.yaml](compose.yaml)
 
 ## Related Documentation
-- [PRD.md](PRD.md): Full product requirements and schema details
-- [AGENTS.md](AGENTS.md): Repository guidelines and coding conventions
-- [README.md](README.md): User-facing quick start guide
-- [DOCKER_WORKFLOW.md](DOCKER_WORKFLOW.md): Comprehensive Docker development guide
+- [prd.md](prd.md): Full product requirements and schema details
+- [agents.md](agents.md): Repository guidelines and coding conventions
+- [readme.md](readme.md): User-facing quick start guide
+- [docker-workflow.md](docker-workflow.md): Comprehensive Docker development guide
