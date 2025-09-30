@@ -1,5 +1,16 @@
 # Repository Guidelines
 
+## Branch Strategy
+- **main**: Production-ready code only. Deployed to GitHub Pages.
+- **dev**: Active development branch. All new features and fixes start here.
+- Rule: Never commit directly to `main`. Always develop on `dev` and merge when stable.
+
+## Git Workflow
+1. Ensure on dev branch: `git checkout dev`
+2. Make changes and test: `npm run dev:dry`, `npm run dev:offline`, `npm run fetch`
+3. Commit: `git add .` → `git commit -m "type: description"`
+4. Merge to main when ready: `git checkout main` → `git merge dev` → `git checkout dev`
+
 ## Project Structure & Module Organization
 - Scripts: `scripts/` — core job is `fetch_quotes.mjs` (ESM).
 - Data: `data/quotes.json` (append-only), `data/seeds.json` (offline/dev).

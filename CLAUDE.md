@@ -5,6 +5,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 HanQuote is an automated quote collection and publishing system that fetches quotes from external APIs and publishes them to a static GitHub Pages site. The system runs on a scheduled GitHub Actions workflow and supports offline development modes.
 
+## Branch Strategy
+- **main**: Production branch, deployed to GitHub Pages, protected
+- **dev**: Development branch, all feature work happens here
+- **Workflow**:
+  - Always work on `dev` branch for development
+  - Test thoroughly before merging to `main`
+  - `main` branch should only receive tested, stable code
+  - GitHub Actions runs on both branches but only `main` deploys to production Pages
+
 ## Architecture
 
 ### Data Flow
@@ -38,6 +47,40 @@ HanQuote is an automated quote collection and publishing system that fetches quo
   "fetched_at": "ISO8601",
   "hash": "sha256:hex"
 }
+```
+
+## Git Workflow
+
+### Checking Current Branch
+```bash
+git branch              # List branches, current branch marked with *
+git status              # Check current branch and working tree status
+```
+
+### Switching Branches
+```bash
+git checkout dev        # Switch to dev branch
+git checkout main       # Switch to main branch
+```
+
+### Development Cycle
+```bash
+# 1. Ensure you're on dev branch
+git checkout dev
+
+# 2. Make changes and test locally
+npm run dev:dry         # Test without writing
+npm run dev:offline     # Test with seeds
+npm run fetch           # Test real fetch
+
+# 3. Commit changes
+git add .
+git commit -m "feat: description of changes"
+
+# 4. When ready for production, merge to main
+git checkout main
+git merge dev
+git checkout dev        # Switch back to dev for continued work
 ```
 
 ## Development Commands
