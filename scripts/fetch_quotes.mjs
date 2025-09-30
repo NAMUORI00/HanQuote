@@ -17,7 +17,15 @@ async function main() {
   await ensureDirs();
   const list = await readJsonArray(DATA_FILE);
 
-  const items = await fetchQuotes(MAX_QUOTES_PER_RUN);
+  // Build a set of existing hashes for fast duplicate checking
+  const existingHashes = new Set();
+  for (const q of list) {
+    if (q.hash) {
+      existingHashes.add(q.hash.replace(/^sha256:/, ''));
+    }
+  }
+
+  const items = await fetchQuotes(MAX_QUOTES_PER_RUN, existingHashes);
   if (items.length === 0) {
     console.log('No quotes fetched. Exiting.');
     return;
@@ -27,11 +35,6 @@ async function main() {
   for (const item of items) {
     const norm = normalizeText(item.text_original);
     const hash = sha256(norm);
-    const exists = list.some(q => q.hash === hash);
-    if (exists) {
-      console.log('Skip duplicate by hash:', hash.slice(0, 8));
-      continue;
-    }
 
     const now = new Date();
     const id = `${now.toISOString().slice(0,10)}_${hash.slice(0,10)}`;
@@ -66,25 +69,56 @@ async function main() {
   }
 }
 
-async function fetchQuotes(n) {
+async function fetchQuotes(n, existingHashes = new Set()) {
   const results = [];
   const seeds = await loadSeeds();
+  const MAX_RETRIES = 10; // Maximum retries to find unique quotes
+
   for (let i = 0; i < n; i++) {
     let q = null;
-    if (OFFLINE_MODE) {
-      q = selectSeed(seeds, i);
-    } else {
-      q = await fetchFromQuotable();
-      if (!q) q = selectSeed(seeds, i);
+    let retries = 0;
+
+    // Keep trying until we get a unique quote or hit max retries
+    while (retries < MAX_RETRIES) {
+      if (OFFLINE_MODE) {
+        q = selectSeed(seeds, i + retries);
+      } else {
+        q = await fetchFromQuotable();
+        if (!q) q = selectSeed(seeds, i + retries);
+      }
+
+      if (!q && seeds.length > 0) {
+        q = selectSeed(seeds, Math.floor(Math.random() * seeds.length));
+      }
+
+      if (!q) {
+        console.warn('No fallback quote available.');
+        break;
+      }
+
+      // Check if this quote is duplicate
+      const norm = normalizeText(q.text_original);
+      const hash = sha256(norm);
+
+      if (!existingHashes.has(hash)) {
+        // Found unique quote
+        existingHashes.add(hash);
+        results.push(q);
+        break;
+      }
+
+      console.log(`Retry ${retries + 1}/${MAX_RETRIES}: Duplicate found, fetching another...`);
+      retries++;
+
+      // Small delay to avoid rate limiting
+      if (!OFFLINE_MODE) {
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
     }
-    if (!q && seeds.length > 0) {
-      q = selectSeed(seeds, Math.floor(Math.random() * seeds.length));
+
+    if (retries >= MAX_RETRIES) {
+      console.warn(`Failed to find unique quote after ${MAX_RETRIES} retries.`);
     }
-    if (!q) {
-      console.warn('No fallback quote available.');
-      continue;
-    }
-    results.push(q);
   }
   return results;
 }

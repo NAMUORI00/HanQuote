@@ -26,29 +26,29 @@
     "hash": "sha256:9986ab89c23f9f41f3b38e2b16595b16d9f7231e6665ca266576efa7c3ac16a2"
   },
   {
-    "id": "2025-09-30_b4c539723f",
-    "text_original": "The only limit to our realization of tomorrow is our doubts of today.",
-    "author": "Franklin D. Roosevelt",
+    "id": "2025-09-30_73eec43f6c",
+    "text_original": "Stay hungry, stay foolish.",
+    "author": "Steve Jobs",
     "source_name": "Seed",
     "source_url": null,
     "language": "en",
     "tags": [
-      "inspiration"
+      "life"
     ],
-    "fetched_at": "2025-09-30T00:55:26.292Z",
-    "hash": "sha256:b4c539723f937ca359a6fe5af6069af4abc7238adc043bbf912216ba320270b4"
+    "fetched_at": "2025-09-30T05:06:40.037Z",
+    "hash": "sha256:73eec43f6c40abae8276507b8320f0b1bc78938a66e459c1255c5c5e1cfc4613"
   },
   {
-    "id": "2025-09-30_b4c539723f",
-    "text_original": "The only limit to our realization of tomorrow is our doubts of today.",
-    "author": "Franklin D. Roosevelt",
+    "id": "2025-09-30_d5f8a6a33d",
+    "text_original": "Code is like humor. When you have to explain it, it’s bad.",
+    "author": "Cory House",
     "source_name": "Seed",
     "source_url": null,
     "language": "en",
     "tags": [
-      "inspiration"
+      "software"
     ],
-    "fetched_at": "2025-09-30T00:55:57.935Z",
-    "hash": "sha256:b4c539723f937ca359a6fe5af6069af4abc7238adc043bbf912216ba320270b4"
+    "fetched_at": "2025-09-30T05:42:37.584Z",
+    "hash": "sha256:d5f8a6a33df14d9c324d3159dee98549db965e880cd233320d058cc6e06cfcf9"
   }
 ]

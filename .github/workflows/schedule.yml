@@ -2,8 +2,11 @@ name: HanQuote Scheduler
 
 on:
   schedule:
-    - cron: '0 0 * * *' # UTC 00:00 -> KST 09:00
+    - cron: '0 0 * * *' # UTC 00:00 -> KST 09:00 (main branch only)
   workflow_dispatch: {}
+  push:
+    branches:
+      - dev  # Test on dev branch commits
 
 permissions:
   contents: write
@@ -51,6 +54,8 @@ jobs:
 
   deploy:
     needs: run
+    # Only deploy to Pages from main branch
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -62,7 +67,8 @@ jobs:
 
   # Optional: Cloudflare Pages deployment (toggle via repo variable CF_PAGES_ENABLED='true')
   deploy_cloudflare:
-    if: ${{ vars.CF_PAGES_ENABLED == 'true' }}
+    # Only deploy to Cloudflare from main branch
+    if: ${{ vars.CF_PAGES_ENABLED == 'true' && github.ref == 'refs/heads/main' }}
     needs: run
     runs-on: ubuntu-latest
     steps:

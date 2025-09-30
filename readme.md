@@ -2,7 +2,7 @@
 
 GitHub Pages용 정적 사이트에 명언을 자동 수집해 게시합니다.
 
-- PRD: `PRD.md`
+- PRD: `prd.md`
 - 데이터: `data/quotes.json`
 - 스크립트: `scripts/*.mjs`
 - 사이트: `site/`

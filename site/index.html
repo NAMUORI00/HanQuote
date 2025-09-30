@@ -7,59 +7,180 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <header>
-      <h1>HanQuote</h1>
-      <p>원문과 한국어 번역으로 매일 한 문장</p>
+    <header class="header" role="banner">
+      <h1 class="header__title">HanQuote</h1>
+      <p class="header__subtitle">원문과 한국어 번역으로 매일 한 문장</p>
     </header>
 
-    <main>
-      <section id="latest"></section>
+    <main class="main" role="main" aria-label="명언 목록">
+      <h2 class="visually-hidden">최신 명언</h2>
+      <section id="latest" aria-live="polite" aria-busy="true"></section>
     </main>
 
-    <footer>
-      <p>
-        데이터 출처: <a href="https://api.quotable.io" target="_blank" rel="noreferrer">Quotable</a>
-        • 코드: <a href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+    <footer class="footer" role="contentinfo">
+      <p class="footer__paragraph">
+        데이터 출처: <a href="https://api.quotable.io" target="_blank" rel="noreferrer" class="footer__link">Quotable</a>
+        • 코드: <a href="https://github.com/" target="_blank" rel="noreferrer" class="footer__link">GitHub</a>
       </p>
-      <p id="updated"></p>
+      <p id="updated" class="footer__updated"></p>
     </footer>
 
     <script>
-      async function load() {
-        const el = document.getElementById('latest');
-        const updated = document.getElementById('updated');
-        try {
-          const resp = await fetch('./data/quotes.json', { cache: 'no-cache' });
-          if (!resp.ok) throw new Error('HTTP ' + resp.status);
-          const arr = await resp.json();
-          arr.sort((a,b) => (a.fetched_at > b.fetched_at ? -1 : 1));
-          const N = 10;
-          const recent = arr.slice(0, N);
-          el.innerHTML = recent.map(renderCard).join('');
-          if (arr.length > 0) {
-            const d = new Date(arr[0].fetched_at);
-            updated.textContent = `마지막 갱신: ${d.toLocaleString('ko-KR')}`;
-          }
-        } catch (e) {
-          el.innerHTML = '<p>데이터를 불러올 수 없습니다.</p>';
-        }
+      /**
+       * Main application logic
+       * Follows modern JavaScript conventions with proper error handling
+       */
+
+      // Constants
+      const QUOTES_DATA_URL = './data/quotes.json';
+      const MAX_QUOTES_DISPLAY = 10;
+      const LOCALE = 'ko-KR';
+
+      // DOM Elements
+      const quotesContainer = document.getElementById('latest');
+      const updatedElement = document.getElementById('updated');
+
+      /**
+       * Escapes HTML special characters to prevent XSS
+       * @param {string} str - String to escape
+       * @returns {string} Escaped string
+       */
+      function escapeHtml(str) {
+        const htmlEscapeMap = {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        };
+        return (str || '').replace(/[&<>"']/g, (char) => htmlEscapeMap[char]);
       }
 
-      function esc(s) {
-        return (s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]));
-      }
+      /**
+       * Renders the hero quote (first quote)
+       * @param {Object} quote - Quote object
+       * @returns {string} HTML string for hero quote
+       */
+      function renderHeroQuote(quote) {
+        const author = quote.author ? escapeHtml(quote.author) : 'Unknown';
+        const sourceText = quote.source_name ? escapeHtml(quote.source_name) : '—';
+        const sourceLink = quote.source_url
+          ? `<a href="${escapeHtml(quote.source_url)}" target="_blank" rel="noreferrer" class="quote-hero__meta-link">원문 보기</a>`
+          : '';
 
-      function renderCard(q) {
-        const src = q.source_name ? `${esc(q.source_name)}${q.source_url ? `, <a href="${esc(q.source_url)}" target="_blank" rel="noreferrer">링크</a>`: ''}` : '—';
         return `
-          <article class="quote">
-            <blockquote>“${esc(q.text_original)}”</blockquote>
-            <p class="meta">${q.author ? esc(q.author) : 'Unknown'} · ${src}</p>
+          <section class="quote-hero">
+            <div class="quote-hero__content">
+              <blockquote class="quote-hero__text">${escapeHtml(quote.text_original)}</blockquote>
+              <p class="quote-hero__author">— ${author}</p>
+              ${sourceLink ? `<p class="quote-hero__meta">${sourceLink}</p>` : ''}
+            </div>
+          </section>
+        `;
+      }
+
+      /**
+       * Renders a single quote card (for non-hero quotes)
+       * @param {Object} quote - Quote object
+       * @param {number} index - Card index for animation delay
+       * @returns {string} HTML string for quote card
+       */
+      function renderQuoteCard(quote, index) {
+        const author = quote.author ? escapeHtml(quote.author) : 'Unknown';
+        const sourceText = quote.source_name ? escapeHtml(quote.source_name) : '—';
+        const sourceLink = quote.source_url
+          ? ` · <a href="${escapeHtml(quote.source_url)}" target="_blank" rel="noreferrer" class="quote-card__meta-link">원문 보기</a>`
+          : '';
+
+        return `
+          <article class="quote-card" style="--card-index: ${index}">
+            <blockquote class="quote-card__text">${escapeHtml(quote.text_original)}</blockquote>
+            <p class="quote-card__author">— ${author}</p>
+            <p class="quote-card__meta">${sourceText}${sourceLink}</p>
           </article>
         `;
       }
 
-      load();
+      /**
+       * Displays loading state
+       */
+      function showLoading() {
+        quotesContainer.innerHTML = '<p class="loading">명언을 불러오는 중...</p>';
+        quotesContainer.setAttribute('aria-busy', 'true');
+      }
+
+      /**
+       * Displays error state
+       * @param {string} message - Error message
+       */
+      function showError(message = '데이터를 불러올 수 없습니다.') {
+        quotesContainer.innerHTML = `<p class="error">${escapeHtml(message)}</p>`;
+        quotesContainer.setAttribute('aria-busy', 'false');
+      }
+
+      /**
+       * Displays quotes
+       * @param {Array} quotes - Array of quote objects
+       */
+      function displayQuotes(quotes) {
+        if (!quotes || quotes.length === 0) {
+          showError('명언이 없습니다.');
+          return;
+        }
+
+        // Sort by fetched_at descending (newest first)
+        const sortedQuotes = quotes.sort((a, b) =>
+          new Date(b.fetched_at) - new Date(a.fetched_at)
+        );
+
+        // Get most recent quotes
+        const recentQuotes = sortedQuotes.slice(0, MAX_QUOTES_DISPLAY);
+
+        // Render hero quote (first) and remaining cards
+        const heroHtml = recentQuotes.length > 0 ? renderHeroQuote(recentQuotes[0]) : '';
+        const cardsHtml = recentQuotes.length > 1
+          ? `<div class="quotes-grid">${recentQuotes.slice(1).map((q, i) => renderQuoteCard(q, i)).join('')}</div>`
+          : '';
+
+        quotesContainer.innerHTML = heroHtml + cardsHtml;
+        quotesContainer.setAttribute('aria-busy', 'false');
+
+        // Update last updated timestamp
+        if (sortedQuotes[0]?.fetched_at) {
+          const lastUpdated = new Date(sortedQuotes[0].fetched_at);
+          updatedElement.textContent = `마지막 갱신: ${lastUpdated.toLocaleString(LOCALE)}`;
+        }
+      }
+
+      /**
+       * Fetches and displays quotes
+       */
+      async function loadQuotes() {
+        showLoading();
+
+        try {
+          const response = await fetch(QUOTES_DATA_URL, {
+            cache: 'no-cache',
+            headers: {
+              'Accept': 'application/json'
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const quotes = await response.json();
+          displayQuotes(quotes);
+
+        } catch (error) {
+          console.error('Failed to load quotes:', error);
+          showError(`오류: ${error.message}`);
+        }
+      }
+
+      // Initialize application
+      loadQuotes();
     </script>
   </body>
   </html>
