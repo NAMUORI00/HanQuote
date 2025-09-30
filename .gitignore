@@ -20,5 +20,10 @@ Thumbs.db
 *~
 
 # Temporary
-*.tmp
+*.tmp		
 .tmp_*
+
+# Development documentation (keep only README.md in main branch)
+AGENTS.md
+CLAUDE.md
+PRD.md
