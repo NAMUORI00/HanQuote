@@ -68,16 +68,20 @@ git checkout main       # Switch to main branch
 # 1. Ensure you're on dev branch
 git checkout dev
 
-# 2. Make changes and test locally
-npm run dev:dry         # Test without writing
-npm run dev:offline     # Test with seeds
-npm run fetch           # Test real fetch
+# 2. Make changes and test with Docker
+make docker-dry         # Test without writing files
+make docker-offline     # Test with seeds.json
+make docker-fetch       # Test real fetch
 
-# 3. Commit changes
+# 3. Preview site (if needed)
+make docker-preview     # View at http://localhost:4173
+# Press Ctrl+C to stop, then: make docker-down
+
+# 4. Commit changes
 git add .
 git commit -m "feat: description of changes"
 
-# 4. When ready for production, merge to main
+# 5. When ready for production, merge to main
 git checkout main
 git merge dev
 git checkout dev        # Switch back to dev for continued work
@@ -85,15 +89,9 @@ git checkout dev        # Switch back to dev for continued work
 
 ## Development Commands
 
-### Local (Node.js 18+)
-```bash
-npm run fetch           # Fetch from Quotable API
-npm run dev:offline     # Use data/seeds.json only
-npm run dev:dry         # Simulate run without writing files
-npm run preview         # Serve site/ on http://localhost:4173
-```
+⚠️ **IMPORTANT: All testing and development MUST be done inside Docker containers. Do NOT run npm commands directly on the host system.**
 
-### Docker Compose
+### Docker Compose (Required for all development)
 ```bash
 docker compose run --rm fetch              # Online fetch
 docker compose run --rm -e OFFLINE_MODE=true fetch
@@ -102,14 +100,20 @@ docker compose up preview                  # Site preview at :4173
 docker compose down
 ```
 
-### Makefile Shortcuts
+### Makefile Shortcuts (Recommended)
 ```bash
-make docker-fetch
-make docker-offline
-make docker-dry
-make docker-preview
-make docker-down
+make docker-fetch       # Fetch quotes online
+make docker-offline     # Fetch quotes offline (seeds.json)
+make docker-dry         # Dry-run mode (no file writes)
+make docker-preview     # Preview site at http://localhost:4173
+make docker-down        # Stop all containers
 ```
+
+### Why Docker-Only?
+- **Consistency**: Same environment as CI/CD (GitHub Actions)
+- **Isolation**: No npm packages polluting host system
+- **Clean state**: Fresh container for each test run
+- **No cleanup**: Containers are ephemeral, no leftover processes
 
 ## Environment Variables
 Copy [.env.example](.env.example) to `.env` for local development:
@@ -186,3 +190,4 @@ No formal test suite yet. To add tests:
 - [PRD.md](PRD.md): Full product requirements and schema details
 - [AGENTS.md](AGENTS.md): Repository guidelines and coding conventions
 - [README.md](README.md): User-facing quick start guide
+- [DOCKER_WORKFLOW.md](DOCKER_WORKFLOW.md): Comprehensive Docker development guide

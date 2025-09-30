@@ -7,7 +7,7 @@
 
 ## Git Workflow
 1. Ensure on dev branch: `git checkout dev`
-2. Make changes and test: `npm run dev:dry`, `npm run dev:offline`, `npm run fetch`
+2. Make changes and test: `make docker-dry`, `make docker-offline`, `make docker-fetch`
 3. Commit: `git add .` → `git commit -m "type: description"`
 4. Merge to main when ready: `git checkout main` → `git merge dev` → `git checkout dev`
 
@@ -19,10 +19,11 @@
 - Dev tooling: `compose.yaml`, `Makefile`, `.env.example`, `package.json`.
 
 ## Build, Test, and Development Commands
-- Local (Node): `npm run fetch` (online), `npm run dev:offline`, `npm run dev:dry`, `npm run preview`.
+⚠️ **IMPORTANT**: All testing MUST be done in Docker containers. Do NOT use npm commands directly.
 - Docker: `docker compose run --rm fetch` · `docker compose up preview`.
-- Make: `make docker-fetch` · `make docker-offline` · `make docker-dry` · `make docker-preview`.
+- Make (recommended): `make docker-fetch` · `make docker-offline` · `make docker-dry` · `make docker-preview`.
 - Notes: `.env` is auto‑loaded by Compose; copy from `.env.example`.
+- Why Docker-only: Consistent environment, no host pollution, clean state, automatic cleanup.
 
 ## Coding Style & Naming Conventions
 - Language: Node.js 18+ ESM; use `import`/`export` only.
