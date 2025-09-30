@@ -24,5 +24,18 @@
     ],
     "fetched_at": "2025-09-25T08:43:01.133Z",
     "hash": "sha256:9986ab89c23f9f41f3b38e2b16595b16d9f7231e6665ca266576efa7c3ac16a2"
+  },
+  {
+    "id": "2025-09-30_73eec43f6c",
+    "text_original": "Stay hungry, stay foolish.",
+    "author": "Steve Jobs",
+    "source_name": "Seed",
+    "source_url": null,
+    "language": "en",
+    "tags": [
+      "life"
+    ],
+    "fetched_at": "2025-09-30T05:06:40.037Z",
+    "hash": "sha256:73eec43f6c40abae8276507b8320f0b1bc78938a66e459c1255c5c5e1cfc4613"
   }
 ]
