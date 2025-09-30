@@ -37,5 +37,18 @@
     ],
     "fetched_at": "2025-09-30T05:06:40.037Z",
     "hash": "sha256:73eec43f6c40abae8276507b8320f0b1bc78938a66e459c1255c5c5e1cfc4613"
+  },
+  {
+    "id": "2025-09-30_d5f8a6a33d",
+    "text_original": "Code is like humor. When you have to explain it, it’s bad.",
+    "author": "Cory House",
+    "source_name": "Seed",
+    "source_url": null,
+    "language": "en",
+    "tags": [
+      "software"
+    ],
+    "fetched_at": "2025-09-30T05:42:37.584Z",
+    "hash": "sha256:d5f8a6a33df14d9c324d3159dee98549db965e880cd233320d058cc6e06cfcf9"
   }
 ]
