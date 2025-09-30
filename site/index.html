@@ -57,21 +57,46 @@
       }
 
       /**
-       * Renders a single quote card
+       * Renders the hero quote (first quote)
        * @param {Object} quote - Quote object
-       * @returns {string} HTML string for quote card
+       * @returns {string} HTML string for hero quote
        */
-      function renderQuoteCard(quote) {
+      function renderHeroQuote(quote) {
         const author = quote.author ? escapeHtml(quote.author) : 'Unknown';
         const sourceText = quote.source_name ? escapeHtml(quote.source_name) : '—';
         const sourceLink = quote.source_url
-          ? `, <a href="${escapeHtml(quote.source_url)}" target="_blank" rel="noreferrer" class="quote-card__meta-link">링크</a>`
+          ? `<a href="${escapeHtml(quote.source_url)}" target="_blank" rel="noreferrer" class="quote-hero__meta-link">원문 보기</a>`
           : '';
 
         return `
-          <article class="quote-card">
-            <blockquote class="quote-card__blockquote">${escapeHtml(quote.text_original)}</blockquote>
-            <p class="quote-card__meta">${author} · ${sourceText}${sourceLink}</p>
+          <section class="quote-hero">
+            <div class="quote-hero__content">
+              <blockquote class="quote-hero__text">${escapeHtml(quote.text_original)}</blockquote>
+              <p class="quote-hero__author">— ${author}</p>
+              ${sourceLink ? `<p class="quote-hero__meta">${sourceLink}</p>` : ''}
+            </div>
+          </section>
+        `;
+      }
+
+      /**
+       * Renders a single quote card (for non-hero quotes)
+       * @param {Object} quote - Quote object
+       * @param {number} index - Card index for animation delay
+       * @returns {string} HTML string for quote card
+       */
+      function renderQuoteCard(quote, index) {
+        const author = quote.author ? escapeHtml(quote.author) : 'Unknown';
+        const sourceText = quote.source_name ? escapeHtml(quote.source_name) : '—';
+        const sourceLink = quote.source_url
+          ? ` · <a href="${escapeHtml(quote.source_url)}" target="_blank" rel="noreferrer" class="quote-card__meta-link">원문 보기</a>`
+          : '';
+
+        return `
+          <article class="quote-card" style="--card-index: ${index}">
+            <blockquote class="quote-card__text">${escapeHtml(quote.text_original)}</blockquote>
+            <p class="quote-card__author">— ${author}</p>
+            <p class="quote-card__meta">${sourceText}${sourceLink}</p>
           </article>
         `;
       }
@@ -111,8 +136,13 @@
         // Get most recent quotes
         const recentQuotes = sortedQuotes.slice(0, MAX_QUOTES_DISPLAY);
 
-        // Render quote cards
-        quotesContainer.innerHTML = recentQuotes.map(renderQuoteCard).join('');
+        // Render hero quote (first) and remaining cards
+        const heroHtml = recentQuotes.length > 0 ? renderHeroQuote(recentQuotes[0]) : '';
+        const cardsHtml = recentQuotes.length > 1
+          ? `<div class="quotes-grid">${recentQuotes.slice(1).map((q, i) => renderQuoteCard(q, i)).join('')}</div>`
+          : '';
+
+        quotesContainer.innerHTML = heroHtml + cardsHtml;
         quotesContainer.setAttribute('aria-busy', 'false');
 
         // Update last updated timestamp
