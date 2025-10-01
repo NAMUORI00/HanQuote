@@ -50,5 +50,18 @@
     ],
     "fetched_at": "2025-09-30T05:42:37.584Z",
     "hash": "sha256:d5f8a6a33df14d9c324d3159dee98549db965e880cd233320d058cc6e06cfcf9"
+  },
+  {
+    "id": "2025-10-01_b424f306b0",
+    "text_original": "Programs must be written for people to read, and only incidentally for machines to execute.",
+    "author": "Harold Abelson",
+    "source_name": "Seed",
+    "source_url": null,
+    "language": "en",
+    "tags": [
+      "software"
+    ],
+    "fetched_at": "2025-10-01T00:11:18.314Z",
+    "hash": "sha256:b424f306b0f912130e144ae8d6e3cc4d1c8ffd32d7526ce2d133f77c8ed3a7d3"
   }
 ]
